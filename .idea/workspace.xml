@@ -2,17 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="394c1f3e-f66b-41a8-a0cd-94006f76240e" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/.babelrc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.prettierrc.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jsconfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/makeData.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/_document.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/basic/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/filtering/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/makeData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/constant/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/constant/makeData.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/common/styles/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/makeData.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,7 +35,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "/Users/developjik/Desktop/github/react_table/pages",
+    "last_opened_file_path": "/Users/developjik/Desktop/github/react_table",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
@@ -49,9 +45,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/pages" />
       <recent name="$PROJECT_DIR$/components/Table" />
-      <recent name="$PROJECT_DIR$" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/components/Table" />
@@ -68,7 +64,8 @@
       <updated>1654023140104</updated>
       <workItem from="1654023141966" duration="84000" />
       <workItem from="1654169142807" duration="2549000" />
-      <workItem from="1654171704642" duration="2640000" />
+      <workItem from="1654171704642" duration="2708000" />
+      <workItem from="1654261431436" duration="552000" />
     </task>
     <servers />
   </component>
