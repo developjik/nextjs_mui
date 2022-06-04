@@ -1,4 +1,4 @@
-import makeData from "../makeData";
+import makeData from "./makeData";
 import React from "react";
 import { roundedMedian } from "../CustomTable.Aggregate:";
 import {
@@ -6,7 +6,7 @@ import {
   NumberRangeColumnFilter,
   SelectColumnFilter,
   SliderColumnFilter,
-} from "../CustomTable.Filter";
+} from "../CustomTable.filter";
 
 export const columns = [
   {

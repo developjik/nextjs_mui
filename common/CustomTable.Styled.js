@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 
+export const TableTitleWrapper = styled.div``;
+
 export const TableTitle = styled.div`
   display: flex;
   align-items: center;
