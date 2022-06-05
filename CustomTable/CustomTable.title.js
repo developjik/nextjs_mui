@@ -1,7 +1,7 @@
 import { Chip } from "@material-ui/core";
 import React from "react";
 
-import * as S from "./CustomTable.Styled";
+import * as S from "./CustomTable.styled";
 
 function CustomTableTitle({ title, instance }) {
   const { rows } = instance;

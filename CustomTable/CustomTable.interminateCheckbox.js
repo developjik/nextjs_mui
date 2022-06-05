@@ -1,5 +1,4 @@
 import React from "react";
-import { Checkbox } from "@material-ui/core";
 
 // eslint-disable-next-line react/display-name
 const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref) => {
@@ -12,7 +11,8 @@ const IndeterminateCheckbox = React.forwardRef(({ indeterminate, ...rest }, ref)
 
   return (
     <>
-      <Checkbox
+      <input
+        type={"checkbox"}
         ref={resolvedRef}
         {...rest}
       />
