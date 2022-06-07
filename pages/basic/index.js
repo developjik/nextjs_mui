@@ -1,127 +1,183 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { useTable } from 'react-table'
+import React from "react";
+import { useTable, usePagination, useRowSelect } from "react-table";
+import { data, columns } from "CustomTable/CustomTable.constant";
+import { v4 as uuidv4 } from "uuid";
+import CustomTablePagination from "../../CustomTable/CustomTable.pagination";
+import CustomTableTitle from "../../CustomTable/CustomTable.title";
+import IndeterminateCheckbox from "../../CustomTable/CustomTable.interminateCheckbox";
 
-import makeData from '../../makeData'
+import * as S from "../../CustomTable/CustomTable.styled";
 
-const Styles = styled.div`
-  padding: 1rem;
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  makeStyles,
+} from "@material-ui/core";
 
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
+function BasicTable({ columns, data }) {
+  const useStyles = makeStyles((theme) => ({
+    container: {
+      border: `1px solid ${theme.colors.border}`,
+      borderRadius: "0 0 4px 4px",
+      maxHeight: "60vh",
+    },
+    table: {
+      border: `1px solid ${theme.colors.border}`,
+    },
+    head: {},
+    body: {
+      maxHeight: "50vh",
+      overflowY: "scroll",
+    },
+    headRow: {
+      backgroundColor: theme.colors.darkGray,
+      border: `1px solid ${theme.colors.border}`,
+      borderBottom: 0,
+      borderRight: 0,
+    },
+    row: {
+      cursor: "pointer",
+      borderLeft: `1px solid ${theme.colors.border}`,
 
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
+      // "&:hover": {
+      //   backgroundColor: theme.colors.primary,
+      // },
+      // "&:hover td": {
+      //   color: theme.colors.white,
+      // },
+    },
 
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
+    headCell: {
+      borderRight: `1px solid ${theme.colors.border}`,
+    },
+    cell: {
+      "&:first-child": {
+        width: "44px",
+      },
+      borderRight: `1px solid ${theme.colors.border}`,
+    },
+  }));
 
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
+  const classes = useStyles();
 
-function Table({ columns, data }) {
-    // Use the state and functions returned from useTable to build your UI
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-    } = useTable({
-        columns,
-        data,
-    })
+  const instance = useTable(
+    {
+      columns,
+      data,
+    },
+    usePagination,
+    useRowSelect,
+    (hooks) => {
+      hooks.allColumns.push((columns) => [
+        {
+          id: "selection",
+          Header: ({ getToggleAllRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            </div>
+          ),
+          Cell: ({ row }) => (
+            <div>
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          ),
+        },
+        ...columns,
+      ]);
+    },
+  );
 
-    // Render the UI for your table
-    return (
-        <table {...getTableProps()}>
-            <thead>
-            {headerGroups.map(headerGroup => (
-                <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map(column => (
-                        <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                    ))}
-                </tr>
-            ))}
-            </thead>
-            <tbody {...getTableBodyProps()}>
-            {rows.map((row, i) => {
-                prepareRow(row)
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    page, // Instead of using 'rows', we'll use page,
+    // which has only the rows for the active page
+
+    selectedFlatRows,
+    state: { selectedRowIds },
+  } = instance;
+
+  return (
+    <>
+      <CustomTableTitle
+        title={"basic"}
+        instance={instance}
+      />
+
+      <S.TableWrapper>
+        <TableContainer className={classes.container}>
+          <Table
+            className={classes.table}
+            padding={"none"}
+            {...getTableProps()}>
+            <TableHead className={classes.head}>
+              {headerGroups.map((headerGroup) => (
+                <TableRow
+                  key={uuidv4()}
+                  className={classes.headRow}
+                  {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <TableCell
+                      key={uuidv4()}
+                      className={classes.headCell}
+                      align={"center"}
+                      {...column.getHeaderProps({
+                        className: column.collapse ? "collapse" : "",
+                      })}>
+                      {column.render("Header")}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHead>
+
+            <TableBody className={classes.body}>
+              {page.map((row, i) => {
+                prepareRow(row);
                 return (
-                    <tr {...row.getRowProps()}>
-                        {row.cells.map(cell => {
-                            return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                        })}
-                    </tr>
-                )
-            })}
-            </tbody>
-        </table>
-    )
+                  <TableRow
+                    key={uuidv4()}
+                    className={classes.row}
+                    hover
+                    {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <TableCell
+                          key={uuidv4()}
+                          className={classes.cell}
+                          align={"center"}
+                          {...cell.getCellProps()}>
+                          {cell.render("Cell")}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </S.TableWrapper>
+      <CustomTablePagination instance={instance} />
+    </>
+  );
 }
 
 function App() {
-    const columns = React.useMemo(
-        () => [
-            {
-                Header: 'Name',
-                columns: [
-                    {
-                        Header: 'First Name',
-                        accessor: 'firstName',
-                    },
-                    {
-                        Header: 'Last Name',
-                        accessor: 'lastName',
-                    },
-                ],
-            },
-            {
-                Header: 'Info',
-                columns: [
-                    {
-                        Header: 'Age',
-                        accessor: 'age',
-                    },
-                    {
-                        Header: 'Visits',
-                        accessor: 'visits',
-                    },
-                    {
-                        Header: 'Status',
-                        accessor: 'status',
-                    },
-                    {
-                        Header: 'Profile Progress',
-                        accessor: 'progress',
-                    },
-                ],
-            },
-        ],
-        []
-    )
-
-    const data = React.useMemo(() => makeData(20), [])
-
-    return (
-        <Styles>
-            <Table columns={columns} data={data} />
-        </Styles>
-    )
+  return (
+    <div style={{ padding: "20px" }}>
+      <BasicTable
+        columns={columns}
+        data={data}
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;
