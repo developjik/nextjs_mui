@@ -1,5 +1,13 @@
 import React from "react";
-import { useTable, usePagination, useRowSelect } from "react-table";
+import cx from "classnames";
+import {
+  useTable,
+  usePagination,
+  useRowSelect,
+  useBlockLayout,
+  useFlexLayout,
+  useResizeColumns,
+} from "react-table";
 import { data, columns } from "CustomTable/CustomTable.constant";
 import { v4 as uuidv4 } from "uuid";
 import CustomTablePagination from "../../CustomTable/CustomTable.pagination";
@@ -60,7 +68,37 @@ function BasicTable({ columns, data }) {
       },
       borderRight: `1px solid ${theme.colors.border}`,
     },
+    resizeHandle: {
+      position: "absolute",
+      cursor: "col-resize",
+      zIndex: 100,
+      opacity: 0,
+      borderLeft: `1px solid ${theme.palette.primary.light}`,
+      borderRight: `1px solid ${theme.palette.primary.light}`,
+      height: "100%",
+      top: 0,
+      transition: "all linear 100ms",
+      right: -2,
+      width: 2,
+      "&.handleActive": {
+        opacity: 1,
+        border: "none",
+        backgroundColor: theme.colors.disabledGray,
+        top: "2px",
+        right: -1,
+        width: "4px",
+      },
+    },
   }));
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      minWidth: 30,
+      width: 150,
+      maxWidth: 400,
+    }),
+    [],
+  );
 
   const classes = useStyles();
 
@@ -69,12 +107,18 @@ function BasicTable({ columns, data }) {
       columns,
       data,
     },
+    useFlexLayout,
+    useResizeColumns,
     usePagination,
     useRowSelect,
     (hooks) => {
       hooks.allColumns.push((columns) => [
         {
           id: "selection",
+          disableResizing: true,
+          minWidth: 52,
+          width: 52,
+          maxWidth: 52,
           Header: ({ getToggleAllRowsSelectedProps }) => (
             <div>
               <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
@@ -88,6 +132,11 @@ function BasicTable({ columns, data }) {
         },
         ...columns,
       ]);
+      hooks.useInstanceBeforeDimensions.push(({ headerGroups }) => {
+        // fix the parent group of the selection button to not be resizable
+        const selectionGroupHeader = headerGroups[0].headers[0];
+        selectionGroupHeader.canResize = false;
+      });
     },
   );
 
@@ -114,7 +163,6 @@ function BasicTable({ columns, data }) {
         <TableContainer className={classes.container}>
           <Table
             className={classes.table}
-            padding={"none"}
             {...getTableProps()}>
             <TableHead className={classes.head}>
               {headerGroups.map((headerGroup) => (
@@ -131,6 +179,17 @@ function BasicTable({ columns, data }) {
                         className: column.collapse ? "collapse" : "",
                       })}>
                       {column.render("Header")}
+                      {column.canResize && (
+                        <div
+                          {...column.getResizerProps()}
+                          style={{ cursor: "col-resize" }} // override the useResizeColumns default
+                          className={
+                            column.isResizing
+                              ? `${classes.resizeHandle} handleActive`
+                              : `${classes.resizeHandle}`
+                          }
+                        />
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
